@@ -411,7 +411,7 @@ export class SubjectExecutor {
                 InstanceChecker.isMongoEntityManager(this.queryRunner.manager)
             ) {
                 const insertResult = await this.queryRunner.manager.insert(
-                    subjects[0].metadata.target,
+                    subjects[0].metadata.tablePath,
                     bulkInsertMaps,
                 )
                 subjects.forEach((subject, index) => {
@@ -428,7 +428,7 @@ export class SubjectExecutor {
                     const insertResult = await this.queryRunner.manager
                         .createQueryBuilder()
                         .insert()
-                        .into(subjects[0].metadata.target)
+                        .into(subjects[0].metadata.tablePath)
                         .values(bulkInsertMaps)
                         .updateEntity(
                             this.options && this.options.reload === false
@@ -460,7 +460,7 @@ export class SubjectExecutor {
                         await this.queryRunner.manager
                             .createQueryBuilder()
                             .insert()
-                            .into(subject.metadata.target)
+                            .into(subject.metadata.tablePath)
                             .values(subject.insertedValueSet)
                             .updateEntity(
                                 this.options && this.options.reload === false
@@ -557,7 +557,7 @@ export class SubjectExecutor {
                 const manager = this.queryRunner.manager as MongoEntityManager
 
                 await manager.update(
-                    subject.metadata.target,
+                    subject.metadata.tablePath,
                     subject.identifier,
                     partialEntity,
                 )
@@ -592,7 +592,7 @@ export class SubjectExecutor {
                 // also, we disable listeners because we call them on our own in persistence layer
                 const updateQueryBuilder = this.queryRunner.manager
                     .createQueryBuilder()
-                    .update(subject.metadata.target)
+                    .update(subject.metadata.tablePath)
                     .set(updateMap)
                     .updateEntity(
                         this.options && this.options.reload === false
@@ -689,7 +689,7 @@ export class SubjectExecutor {
                 InstanceChecker.isMongoEntityManager(this.queryRunner.manager)
             ) {
                 const manager = this.queryRunner.manager as MongoEntityManager
-                await manager.delete(subjects[0].metadata.target, deleteMaps)
+                await manager.delete(subjects[0].metadata.tablePath, deleteMaps)
             } else {
                 // for tree tables we execute additional queries
                 switch (subjects[0].metadata.treeType) {
@@ -713,7 +713,7 @@ export class SubjectExecutor {
                 await this.queryRunner.manager
                     .createQueryBuilder()
                     .delete()
-                    .from(subjects[0].metadata.target)
+                    .from(subjects[0].metadata.tablePath)
                     .where(deleteMaps)
                     .callListeners(false)
                     .execute()
@@ -794,7 +794,7 @@ export class SubjectExecutor {
                         .manager as MongoEntityManager
 
                     updateResult = await manager.update(
-                        subject.metadata.target,
+                        subject.metadata.tablePath,
                         subject.identifier,
                         partialEntity,
                     )
@@ -806,7 +806,7 @@ export class SubjectExecutor {
                     const softDeleteQueryBuilder = this.queryRunner.manager
                         .createQueryBuilder()
                         .softDelete()
-                        .from(subject.metadata.target)
+                        .from(subject.metadata.tablePath)
                         .updateEntity(
                             this.options && this.options.reload === false
                                 ? false
@@ -917,7 +917,7 @@ export class SubjectExecutor {
                         .manager as MongoEntityManager
 
                     updateResult = await manager.update(
-                        subject.metadata.target,
+                        subject.metadata.tablePath,
                         subject.identifier,
                         partialEntity,
                     )
@@ -929,7 +929,7 @@ export class SubjectExecutor {
                     const softDeleteQueryBuilder = this.queryRunner.manager
                         .createQueryBuilder()
                         .restore()
-                        .from(subject.metadata.target)
+                        .from(subject.metadata.tablePath)
                         .updateEntity(
                             this.options && this.options.reload === false
                                 ? false
@@ -1107,7 +1107,7 @@ export class SubjectExecutor {
             // merge into entity all generated values returned by a database
             if (subject.generatedMap)
                 this.queryRunner.manager.merge(
-                    subject.metadata.target as any,
+                    subject.metadata.tablePath as any,
                     subject.entity,
                     subject.generatedMap,
                 )
